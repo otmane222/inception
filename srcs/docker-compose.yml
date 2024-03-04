@@ -2,49 +2,76 @@ version: '3.8'
 
 services:
   nginx:
-    build:
-      context: ./requirements/nginx
-    ports:
-      - "80:80"
-    volumes:
-      - "./wordpress:/wordpress"
-    networks:
-      - my-net
-  wordpress:
     env_file:
       - .env
     build:
+      context: ./requirements/nginx
+    container_name: nginx
+    ports:
+      - "443:443"
+    volumes:
+      - "wp:/wordpress"
+      - "/home/oaboulgh/data/site:/site"
+    networks:
+      - my-net
+    depends_on:
+      - wordpress
+    # restart: always
+  wordpress:
+    env_file:
+      - .env
+    container_name: wordpress
+    build:
       context: ./requirements/wordpress
+    image: wordpress:v1
     expose:
       - 9000
     volumes:
-      - "./wordpress:/wordpress"
+      - "wp:/wordpress"
     networks:
       - my-net
+    # restart: always
+    depends_on:
+      - mariadb
   mariadb:
     env_file:
       - .env
     build:
       context: ./requirements/mariadb
+    image: db:v1
+    container_name: mariadb
     ports:
       - "3306:3306"
-    networks:
-      - my-net
-  ftp:
-    build:
-      context: ./requirements/bonus/ftp
-    ports:
-      - "20:20"
-      - "21:21"
-      - "22:22"
-    # expose:
-    #   - 21
-    #   - 20
     volumes:
-      - "./wordpress:/ptr"
+      - "db:/var/lib/mysql"
     networks:
       - my-net
+    # restart: always
+  # ftp:
+  #   env_file:
+  #     - .env
+  #   build:
+  #     context: ./requirements/bonus/ftp
+  #   ports:
+  #     - "30000-31000:30000-31000"
+  #     - "21:21"
+  #   volumes:
+  #     - "/home/oaboulgh/data/wordpress:/ptr"
+  #   networks:
+  #     - my-net
 
 networks:
   my-net:
     driver: bridge
+
+volumes:
+  db:
+    driver_opts:
+      type: none
+      device: /home/oaboulgh/data/mariadb
+      o: bind
+  wp:
+    driver_opts:
+      type: none
+      device: /home/oaboulgh/data/wordpress
+      o: bind

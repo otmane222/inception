@@ -12,4 +12,4 @@ RUN chmod +x test.sh
 
 ENTRYPOINT [ "/test.sh" ]
 
-CMD ["tail", "-f", "/dev/null"]
+# CMD [ "tail", "-f", "/dev/null" ]

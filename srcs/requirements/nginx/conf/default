@@ -19,8 +19,13 @@
 # Default server configuration
 #
 server {
-        listen 80 default_server;
-        listen [::]:80 default_server;
+		listen 443 ssl default_server;
+        listen [::]:443 ssl default_server;
+
+        ssl_protocols TLSv1.2 TLSv1.3;
+		ssl_prefer_server_ciphers on;
+		ssl_certificate /server.crt;
+		ssl_certificate_key /server.key;
 
         # SSL configuration
         #
@@ -52,15 +57,7 @@ server {
         }
 
         # pass PHP scripts to FastCGI server
-        #
-        # location ~ \.php$ {
-        # #       include snippets/fastcgi-php.conf;
-        
-        #       # With php-fpm (or other unix sockets):
-        #       fastcgi_pass wordpress:9000;
-        #       # With php-cgi (or other tcp sockets):
-        # #       fastcgi_pass 127.0.0.1:9000;
-        # }
+
         location ~ \.php$ {
                 include fastcgi_params;
                 fastcgi_pass wordpress:9000; # Points to the PHP container
@@ -81,17 +78,15 @@ server {
 # You can move that to a different file under sites-available/ and symlink that
 # to sites-enabled/ to enable it.
 #
-#server {
-#       listen 80;
-#       listen [::]:80;
-#
-#       server_name example.com;
-#
-#       root /var/www/example.com;
-#       index index.html;
-#
-#       location / {
-#               try_files $uri $uri/ =404;
-#       }
-#}
-#
+# server {
+# 	listen 80;
+# 	listen [::]:80;
+
+
+# 	root /site;
+# 	index index.html;
+
+# 	location / {
+# 			try_files $uri $uri/ index.html;
+# 	}
+# }
