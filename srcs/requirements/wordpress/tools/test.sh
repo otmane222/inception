@@ -16,5 +16,6 @@ while ! function_func ; do
 	sleep 1;
 done
 
+wp user create $USER_NAME $USER_EMAIL --role=author --user_pass=$USER_PASS --allow-root
 
 exec $@

@@ -23,7 +23,7 @@ services:
     container_name: wordpress
     build:
       context: ./requirements/wordpress
-    image: wordpress:v1
+    # image: wordpress:v1
     expose:
       - 9000
     volumes:
@@ -38,7 +38,6 @@ services:
       - .env
     build:
       context: ./requirements/mariadb
-    image: db:v1
     container_name: mariadb
     ports:
       - "3306:3306"
@@ -67,11 +66,11 @@ networks:
 volumes:
   db:
     driver_opts:
-      type: none
+      type: volume
       device: /home/oaboulgh/data/mariadb
       o: bind
   wp:
     driver_opts:
-      type: none
+      type: volume
       device: /home/oaboulgh/data/wordpress
       o: bind
