@@ -2,7 +2,7 @@ FROM debian:stable
 
 RUN apt update
 
-RUN apt install php8.2-fpm php-mysql vim curl wget net-tools iputils-ping -y
+RUN apt install php8.2-fpm php-mysql curl wget -y
 
 COPY ./conf/www.conf /etc/php/8.2/fpm/pool.d/
 
@@ -20,5 +20,4 @@ WORKDIR /wordpress
 
 ENTRYPOINT [ "/test.sh"]
 
-CMD ["tail", "-f", "/dev/null"]
-# CMD [ "php-fpm8.2" , "-F"]
+CMD [ "php-fpm8.2" , "-F"]

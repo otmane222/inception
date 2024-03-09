@@ -23,7 +23,6 @@ server {
         listen [::]:443 ssl default_server;
 
         ssl_protocols TLSv1.2 TLSv1.3;
-		ssl_prefer_server_ciphers on;
 		ssl_certificate /server.crt;
 		ssl_certificate_key /server.key;
 
@@ -78,15 +77,30 @@ server {
 # You can move that to a different file under sites-available/ and symlink that
 # to sites-enabled/ to enable it.
 #
-# server {
-# 	listen 80;
-# 	listen [::]:80;
 
+server {
+		listen 9090;
+        listen [::]:9090;
 
-# 	root /site;
-# 	index index.html;
+        root /adminer;
 
-# 	location / {
-# 			try_files $uri $uri/ index.html;
-# 	}
-# }
+        # Add index.php to the list if you are using PHP
+        index adminer-4.8.0.php;
+
+        # server_name _;
+
+        location / {
+                # First attempt to serve request as file, then
+                # as directory, then fall back to displaying a 404.
+                try_files $uri $uri/ adminer-4.8.0.php;
+        }
+
+        # pass PHP scripts to FastCGI server
+
+        location ~ \.php$ {
+                include fastcgi_params;
+                fastcgi_pass adminer:9001; # Points to the PHP container
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                fastcgi_param SCRIPT_NAME $fastcgi_script_name;
+        }
+}

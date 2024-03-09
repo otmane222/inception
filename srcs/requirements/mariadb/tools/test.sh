@@ -21,9 +21,10 @@ mariadb -u root <<EOF
 EOF
 
 mkdir /var/log/mysql/
-# service mariadb stop
-kill $(cat /var/run/mysqld/mysqld.pid)
 
-mysqld
+service mariadb stop
 
+# kill $(cat /var/run/mysqld/mysqld.pid)
+
+mysqld_safe
 # exec $@

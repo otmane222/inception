@@ -11,5 +11,3 @@ COPY ./tools/test.sh /
 RUN chmod +x test.sh
 
 ENTRYPOINT [ "/test.sh" ]
-
-# CMD [ "tail", "-f", "/dev/null" ]
