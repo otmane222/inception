@@ -14,7 +14,8 @@ RUN mkdir adminer
 
 WORKDIR /adminer
 
-RUN wget https://www.adminer.org/static/download/4.8.0/adminer-4.8.0.php
+RUN wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php -O adminer.php
+
 
 
 ENTRYPOINT [ "/test.sh" ]
